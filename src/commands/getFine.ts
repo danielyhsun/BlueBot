@@ -12,11 +12,15 @@ export const getFine: Command = {
         const { user } = interaction;
         const targetMember = await getMemberData(user.id);
 
+        if (targetMember !== null) {
         const fineEmbed = new EmbedBuilder();
         fineEmbed
             .setTitle(`Fine for @${ user.tag }`)
             .addFields(
                 { name: "Current Fine", value: targetMember.fine.toString() });
         await interaction.editReply({ embeds: [fineEmbed] });
+        } else {
+            await interaction.editReply("You are not registered!");
+        }
     },
 }
