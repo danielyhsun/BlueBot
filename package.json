@@ -2,14 +2,21 @@
   "name": "bluebot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./prod/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node -r dotenv/config ./prod/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/builders": "^1.6.3",
+    "@discordjs/rest": "^1.7.1",
+    "@types/node": "^20.1.4",
+    "discord-api-types": "^0.37.42",
     "discord.js": "^14.11.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "mongoose": "^7.1.1",
+    "typescript": "^5.0.4"
   }
 }
