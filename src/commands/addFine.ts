@@ -33,7 +33,7 @@ export const addFine: Command = {
         const updatedMember = await updateMemberData(targetMember, amt);
         const fineEmbed = new EmbedBuilder();
         fineEmbed
-            .setTitle(`Fine for @${ memberOption?.user }`)
+            .setTitle(`Fine for @${ memberOption?.user?.id }`)
             .addFields(
                 // { name: "Amount to Add", value: amt.toString },
                 { name: "Current Fine", value: targetMember.fine.toString() });

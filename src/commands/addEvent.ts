@@ -27,8 +27,6 @@ export const addEvent: Command = {
         .setName("addevent")
         .setDescription("Adds Event to Calendar"),
     run: async (interaction) => {
-        // await interaction.deferReply();
-        const guild = interaction.guild;
         const eventModal = new ModalBuilder()
             .setCustomId("CreateEventModal")
             .setTitle("Create Event");
@@ -62,8 +60,10 @@ export const addEvent: Command = {
 
         eventModal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
 
+        // display the modal
         await interaction.showModal(eventModal);
 
+        // wait for modal submission
         interaction.awaitModalSubmit({ time: 60_000 })
             .then(async (interaction) => {
                 const guild = interaction.guild;
@@ -73,6 +73,7 @@ export const addEvent: Command = {
                 const lengthValue = parseInt(eventLength) || 1;
                 const location = interaction.fields.getTextInputValue("locationInput");
 
+                // create new scheduled event from modal submission input values
                 const event = guild?.scheduledEvents.create({
                     name: eventName,
                     scheduledStartTime: chrono.parseDate(eventDate),
