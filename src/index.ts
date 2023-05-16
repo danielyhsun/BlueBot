@@ -16,7 +16,11 @@ dotenv.config();
 
   // Instantiate bot
   const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildScheduledEvents],
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildScheduledEvents,
+      GatewayIntentBits.GuildPresences,
+    ],
   });
 
   // Do this when the bot client is ready
