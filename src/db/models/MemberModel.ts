@@ -5,7 +5,8 @@ export interface MemberInt extends Document {
     name: string;
     attendance: number;
     cs: string;
-    fine: number;
+    fineTotal: number;
+    fines: { amount: number; reason: string }[];
 }
 
 export const Member = new Schema({
@@ -13,7 +14,16 @@ export const Member = new Schema({
     name: String,
     attendance: Number,
     cs: String,
-    fine: Number,
+    fineTotal: Number,
+    fines: {
+        type: [
+            {
+                amount: Number,
+                reason: String,
+            },
+        ],
+        default: [], // Default empty array
+    },
 })
 
 export default model<MemberInt>("member", Member);
