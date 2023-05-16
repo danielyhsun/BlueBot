@@ -1,3 +1,4 @@
+// deprecated
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import { type Command } from "../interfaces/Command";
 import { getMemberData } from "../modules/getMemberData";
@@ -27,7 +28,7 @@ export const getFine: Command = {
 
       let finesAndReasons = "";
       targetMember.fines.forEach((fine, index) => {
-        finesAndReasons += `${index + 1}: ${fine.amount} - ${fine.reason}\n`;
+        finesAndReasons += `**${index + 1}.** \`${fine.amount} - ${fine.reason}\`\n`;
       });
 
       fineEmbed

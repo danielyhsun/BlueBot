@@ -1,3 +1,4 @@
+// deprecated
 import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 import { type Command } from "../interfaces/Command";
 import { getMemberData } from "../modules/getMemberData";
