@@ -21,6 +21,12 @@ export const addFine: Command = {
                 .setDescription("Amount to add")
                 .setRequired(true)
         )
+        .addStringOption((option) => 
+            option
+                .setName("reason")
+                .setDescription("Reason for fine")
+                .setRequired(true)
+        )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     run: async (interaction) => {
         await interaction.deferReply();
@@ -30,13 +36,18 @@ export const addFine: Command = {
         if (targetMember !== null) {
         const amtOption = interaction.options.get("amount");
         const amt = amtOption?.value as number;
-        const updatedMember = await updateMemberData(targetMember, amt);
+        const reasonOption = interaction.options.get("reason");
+        const reason = reasonOption?.value as string;
+        const updatedMember = await updateMemberData(targetMember, amt, reason);
         const fineEmbed = new EmbedBuilder();
         fineEmbed
-            .setTitle(`Fine for @${ memberOption?.user?.id }`)
+            .setTitle("Fine Updated")
             .addFields(
                 // { name: "Amount to Add", value: amt.toString },
-                { name: "Current Fine", value: targetMember.fine.toString() });
+                { name: "Member", value: `${ memberOption?.user }` },
+                { name: "Reason", value: reason },
+                { name: "Amount Added", value: amt.toString(), inline: true },
+                { name: "Updated Fine", value: targetMember.fineTotal.toString(), inline: true });
         await interaction.editReply({ embeds: [fineEmbed] });
         } else {
             await interaction.editReply("That user isn't a registered member yet!");
