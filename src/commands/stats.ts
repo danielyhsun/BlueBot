@@ -8,7 +8,7 @@ export const stats: Command = {
         .setName("stats")
         .setDescription("Show statistics"),
     run: async (interaction) => {
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
         const { user } = interaction;
         const targetMember = await getMemberData(user.id);
         if (targetMember !== null) {
@@ -16,11 +16,12 @@ export const stats: Command = {
         const statsEmbed = new EmbedBuilder();
 
         statsEmbed
-            .setTitle(`Stats for ${ targetMember.name }`)
+            .setTitle("Statistics")
+            .setDescription(`for ${ interaction.user }`)
             .addFields(
                 { name: "Attendance", value: targetMember.attendance.toString() + "%" },
                 { name: "Community Service", value: targetMember.cs },
-                { name: "Current Fine", value: targetMember!.fine.toString() });
+                { name: "Current Fine", value: targetMember!.fineTotal.toString() });
 
         await interaction.editReply({ embeds: [statsEmbed] });
         } else {
