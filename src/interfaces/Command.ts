@@ -1,12 +1,12 @@
-import { 
-    SlashCommandBuilder,
-    SlashCommandSubcommandsOnlyBuilder,
-    CommandInteraction
-} from "discord.js"
+import {
+  type SlashCommandBuilder,
+  type SlashCommandSubcommandsOnlyBuilder,
+  type CommandInteraction,
+} from "discord.js";
 
-export interface Command {
-    data: 
+export type Command = {
+  data:
     | Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand">
     | SlashCommandSubcommandsOnlyBuilder;
-    run: (interaction: CommandInteraction) => Promise<void>;
-}
+  run: (interaction: CommandInteraction) => Promise<void>;
+};

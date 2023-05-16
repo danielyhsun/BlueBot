@@ -19,6 +19,11 @@
   "devDependencies": {
     "@types/node": "^20.1.4",
     "@types/node-schedule": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.40.0",
+    "eslint-config-xo": "^0.43.1",
+    "eslint-config-xo-typescript": "^0.57.0",
     "typescript": "^5.0.4"
   }
 }

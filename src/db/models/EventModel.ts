@@ -1,15 +1,15 @@
-import { Document, model, Schema, Types } from "mongoose";
+import { type Document, model, Schema } from "mongoose";
 
-export interface EventInt extends Document {
-    eventName: string;
-    date: Date;
-    // attending: Types.ObjectId[];
-}
+export type EventInt = {
+  eventName: string;
+  date: Date;
+  // Attending: Types.ObjectId[];
+} & Document;
 
 export const Event = new Schema({
-    eventName: String,
-    date: Date,
-    // attending: [{ type: Types.ObjectId, ref: "member" }],
-})
+  eventName: String,
+  date: Date,
+  // Attending: [{ type: Types.ObjectId, ref: "member" }],
+});
 
 export default model<EventInt>("event", Event);

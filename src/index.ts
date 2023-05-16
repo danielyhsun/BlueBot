@@ -1,64 +1,54 @@
-require("dotenv").config();
-import { 
-    Client, 
-    GatewayIntentBits, 
-    Events, 
-    GuildScheduledEventPrivacyLevel, 
-    GuildScheduledEventEntityType, 
-    TextChannel
-} from 'discord.js';
+import dotenv from "dotenv";
+import { Client, GatewayIntentBits, Events } from "discord.js";
 import { connectDatabase } from "./db/connectDatabase";
 import { validateEnv } from "./utils/validateEnv";
 import { onInteraction } from "./events/onInteraction";
 import { onReady } from "./events/onReady";
-import * as chrono from "chrono-node";
-import schedule from "node-schedule";
-import Event, { EventInt } from './db/models/EventModel';
-import { MemberInt } from './db/models/MemberModel';
-import { channel } from 'diagnostics_channel';
-import EventModel from './db/models/EventModel';
-import { refreshScheduler } from './modules/refreshScheduler';
+import EventModel from "./db/models/EventModel";
+import { refreshScheduler } from "./modules/refreshScheduler";
 
-
+dotenv.config();
 
 (async () => {
-    if (!validateEnv()) return;
-    // instantiate bot
-    const BOT = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildScheduledEvents] });
-    
-    // do this when the bot client is ready
-    BOT.on(Events.ClientReady, async () => {
-        await onReady(BOT);
-        console.log(`Connected as ${ BOT.user!.tag }`);
-    });
+  if (!validateEnv()) {
+    return;
+  }
 
-    // do this when an interaction is created
-    BOT.on(Events.InteractionCreate,
-        async (interaction) => await onInteraction(interaction)
-    );
-    
-    // do this when a guild scheduled event is deleted/cancelled
-    BOT.on(Events.GuildScheduledEventDelete,
-        async (event) => {
-            try {
-                const result = await EventModel.deleteOne({ eventName: event.name, date: event.scheduledStartAt });
-                // console.log(result);
-                await refreshScheduler(BOT);
-            } catch (err) {
-                console.error("Error deleting event: ", err);
-            }
-        }
-    );
+  // Instantiate bot
+  const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildScheduledEvents],
+  });
 
-    // do this when a guild scheduled event is created
-    BOT.on(Events.GuildScheduledEventCreate, 
-        async () => {
-            console.log("Event created")
-        });
+  // Do this when the bot client is ready
+  client.on(Events.ClientReady, async () => {
+    await onReady(client);
+    console.log(`Connected as ${client.user?.tag}`);
+  });
 
-    // connect to db
-    await connectDatabase();
-    // login to bot session with token
-    await BOT.login(process.env.DISCORD_TOKEN);
+  // Do this when an interaction is created
+  client.on(Events.InteractionCreate, async (interaction) => onInteraction(interaction));
 
+  // Do this when a guild scheduled event is deleted/cancelled
+  client.on(Events.GuildScheduledEventDelete, async (event) => {
+    try {
+      await EventModel.deleteOne({
+        eventName: event.name,
+        date: event.scheduledStartAt,
+      });
+      // Console.log(result);
+      await refreshScheduler(client);
+    } catch (err) {
+      console.error("Error deleting event: ", err);
+    }
+  });
+
+  // Do this when a guild scheduled event is created
+  client.on(Events.GuildScheduledEventCreate, async () => {
+    console.log("Event created");
+  });
+
+  // Connect to db
+  await connectDatabase();
+  // Login to bot session with token
+  await client.login(process.env.DISCORD_TOKEN);
 })();
