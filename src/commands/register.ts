@@ -12,7 +12,7 @@ export const register: Command = {
                 .setDescription("Your full name")
                 .setRequired(true)),
     run: async (interaction) => {
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
         const { user } = interaction;
         const nameOption = interaction.options.get("name");
         const register = await registerMember(user.id, nameOption?.value as string);
