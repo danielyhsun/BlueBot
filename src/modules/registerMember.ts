@@ -12,7 +12,8 @@ export const registerMember = async (id: string, name: string, ) => {
             name: name,
             attendance: 100,
             cs: "0/2",
-            fine: 0,
+            fineTotal: 0,
+            fines: [],
         }))
     // return true after registration
     return true;
