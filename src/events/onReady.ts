@@ -1,6 +1,9 @@
-import { Client, REST } from "discord.js";
+import { Client, REST, TextChannel } from "discord.js";
 import { CommandList } from "../commands/_CommandList";
 import { Routes } from "discord-api-types/v9";
+import Event, { EventInt } from "../db/models/EventModel";
+import schedule from "node-schedule";
+import { refreshScheduler } from "../modules/refreshScheduler";
 
 export const onReady = async (BOT: Client) => {
     const rest = new REST({ version: "10" }).setToken(
@@ -15,4 +18,6 @@ export const onReady = async (BOT: Client) => {
         { body: commandData }
     );
     console.log("Discord ready!");
+
+    await refreshScheduler(BOT);
 }

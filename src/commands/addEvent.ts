@@ -18,6 +18,8 @@ import { getMemberData } from "../modules/getMemberData";
 import { Event } from '../db/models/EventModel';
 import { ModalSubmitInteraction } from 'discord.js';
 import * as chrono from "chrono-node";
+import { addEventData } from '../modules/addEventData';
+import { refreshScheduler } from '../modules/refreshScheduler';
 
 //Add Event to Calendar and Google Sheet so then bros can get marked down for attendance
 export const addEvent: Command = {
@@ -63,7 +65,7 @@ export const addEvent: Command = {
         await interaction.showModal(eventModal);
 
         interaction.awaitModalSubmit({ time: 60_000 })
-            .then(interaction => {
+            .then(async (interaction) => {
                 const guild = interaction.guild;
                 const eventName = interaction.fields.getTextInputValue("eventNameInput");
                 const eventDate = interaction.fields.getTextInputValue("dateTimeInput");
@@ -79,7 +81,13 @@ export const addEvent: Command = {
                     entityType: GuildScheduledEventEntityType.External,
                     entityMetadata: { location: location }
                 });
-                interaction.reply({ content: `Event "${ eventName }" at ${chrono.parseDate(eventDate)} created!`});
+
+                // add event data to db after the guild scheduled event is created
+                await addEventData(eventName, chrono.parseDate(eventDate));
+                // refresh scheduler after event data is added to db
+                await refreshScheduler(interaction.client);
+
+                interaction.reply({ content: `Event "${ eventName }" at ${chrono.parseDate(eventDate)} created!`, ephemeral: true });
             })
             .catch(err => console.log("No modal submit interaction collected"));
     }, 
