@@ -75,7 +75,7 @@ export const addEvent: Command = {
         });
 
         // Add event data to db after the guild scheduled event is created
-        await addEventData(eventName, chrono.parseDate(eventDate));
+        // await addEventData(eventName, chrono.parseDate(eventDate));
         // Refresh scheduler after event data is added to db
         await refreshScheduler(interaction.client);
 

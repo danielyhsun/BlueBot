@@ -1,6 +1,6 @@
 import { type MemberInt } from "../db/models/MemberModel";
 
-export const updateMemberData = async (
+export const updateMemberDataAddFine = async (
   Member: MemberInt,
   fineChange: number,
   fineReason: string

@@ -2,7 +2,7 @@
 import { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 import { type Command } from "../interfaces/Command";
 import { getMemberData } from "../modules/getMemberData";
-import { updateMemberData } from "../modules/updateMemberData";
+import { updateMemberDataAddFine } from "../modules/updateMemberData";
 
 export const addFine: Command = {
   data: new SlashCommandBuilder()

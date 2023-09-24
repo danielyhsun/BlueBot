@@ -12,7 +12,7 @@ import {
 } from "discord.js";
 import { type Command } from "../interfaces/Command";
 import * as chrono from "chrono-node";
-import { addEventData } from "../modules/addEventData";
+import { addEventData } from '../modules/addEventData';
 import { refreshScheduler } from "../modules/refreshScheduler";
 
 // Add Event to Calendar and Google Sheet so then bros can get marked down for attendance
@@ -30,6 +30,11 @@ export const events: Command = {
             .setDescription("Assign attendance to event for a specific role")
             .setRequired(false)
         )
+    )
+    .addSubcommand((subcommand) => 
+      subcommand
+        .setName("attendance")
+        .setDescription("attendance")
     ),
   run: async (interaction) => {
     const options = interaction.options as CommandInteractionOptionResolver<CacheType>;
@@ -73,7 +78,7 @@ export const events: Command = {
       await interaction.showModal(eventModal);
 
       const role = options.getRole("group") as Role;
-      let membersWithRole = [];
+      let membersWithRole: string[] = [];
       if (role) {
         membersWithRole = role.members.map(member => member.id);
         console.log(membersWithRole);
@@ -91,7 +96,7 @@ export const events: Command = {
           const location = interaction.fields.getTextInputValue("locationInput");
 
           // Create new scheduled event from modal submission input values
-          guild?.scheduledEvents.create({
+          const event = guild?.scheduledEvents.create({
             name: eventName,
             scheduledStartTime: chrono.parseDate(eventDate),
             scheduledEndTime: chrono
@@ -101,11 +106,6 @@ export const events: Command = {
             entityType: GuildScheduledEventEntityType.External,
             entityMetadata: { location },
           });
-
-          // Add event data to db after the guild scheduled event is created
-          await addEventData(eventName, chrono.parseDate(eventDate));
-          // Refresh scheduler after event data is added to db
-          await refreshScheduler(interaction.client);
 
           interaction.reply({
             content: `Event "${eventName}" at ${chrono.parseDate(eventDate)} created!`,

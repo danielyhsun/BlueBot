@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import { type Command } from "../interfaces/Command";
 import { getMemberData } from "../modules/getMemberData";
-import { updateMemberData } from "../modules/updateMemberData";
+import { updateMemberDataAddFine } from "../modules/updateMemberData";
 import { MemberInt } from "../db/models/MemberModel";
 
 export const fines: Command = {
@@ -54,7 +54,7 @@ export const fines: Command = {
         const amt = amtOption?.value as number;
         const reasonOption = interaction.options.get("reason");
         const reason = reasonOption?.value as string;
-        await updateMemberData(targetMember, amt, reason);
+        await updateMemberDataAddFine(targetMember, amt, reason);
         const fineEmbed = new EmbedBuilder();
         fineEmbed.setTitle("Fine Updated").addFields(
           // { name: "Amount to Add", value: amt.toString },
@@ -90,7 +90,7 @@ export const fines: Command = {
 
         fineEmbed
           .setTitle("Fines")
-          .setDescription(`for ${interaction.user}`)
+          .setDescription(`for ${interaction.options.get("member")?.user}`)
           .addFields(
             { name: "Total", value: fineTotal.toString() },
             { name: "Fines", value: finesAndReasons }

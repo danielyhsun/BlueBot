@@ -1,4 +1,5 @@
 import MemberModel from "../db/models/MemberModel";
+import { calculateAttendance } from "./calculateAttendance";
 
 export const registerMember = async (id: string, name: string) => {
   if (await MemberModel.exists({ discordId: id })) {
@@ -9,8 +10,8 @@ export const registerMember = async (id: string, name: string) => {
   // Creates data for new member
   await MemberModel.create({
     discordId: id,
-    name,
-    attendance: 100,
+    name: name,
+    attendance: 0,
     cs: "0/2",
     fineTotal: 0,
     fines: [],

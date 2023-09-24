@@ -15,16 +15,16 @@ export const refreshScheduler = async (client: Client) => {
 
   // Schedule new jobs for each event
   events.forEach((event) => {
-    console.log(`Event date: ${event.date}`);
+    // console.log(`Event date: ${event.date}`);
     const eventDateTimestamp = event.date.getTime();
-    console.log(`Event date timestamp: ${eventDateTimestamp}`);
+    // console.log(`Event date timestamp: ${eventDateTimestamp}`);
 
     // Subtract 24 hours (in ms) from the event date
     const reminderDate = new Date(event.date);
     reminderDate.setHours(reminderDate.getHours() - 24);
-    console.log(`Reminder date: ${reminderDate}`);
+    // console.log(`Reminder date: ${reminderDate}`);
     const reminderDateTimestamp = reminderDate.getTime();
-    console.log(`Reminder date timestamp: ${reminderDateTimestamp}`);
+    // console.log(`Reminder date timestamp: ${reminderDateTimestamp}`);
 
     schedule.scheduleJob(reminderDate, async () => {
       try {
